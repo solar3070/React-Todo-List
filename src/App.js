@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { createGlobalStyle } from "styled-components";
 import TodoTemplate from "./components/TodoTemplate";
 import TodoHead from "./components/TodoHead";
@@ -6,6 +6,16 @@ import TodoList from "./components/TodoList";
 import TodoCreate from "./components/TodoCreate";
 
 function App() {
+  const [inputs, setInputs] = useState({
+    text: "",
+  });
+  const { text } = inputs;
+  const onChange = (e) => {
+    setInputs({
+      text: e.target.value,
+    });
+  };
+
   const [todos, setTodos] = useState([
     {
       id: 1,
@@ -14,7 +24,7 @@ function App() {
     },
     {
       id: 2,
-      text: "컴포넌트 스타일링 하기",
+      text: "컴포넌트 스타일링하기",
       done: true,
     },
     {
@@ -29,12 +39,39 @@ function App() {
     },
   ]);
 
+  const onToggle = (id) => {
+    return setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, done: !todo.done } : todo
+      )
+    );
+  };
+
+  const onRemove = (id) => {
+    return setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
+  const nextId = useRef(5);
+  const onCreate = () => {
+    const todo = {
+      id: nextId.current,
+      text,
+      done: false,
+    };
+    setTodos(todos.concat(todo));
+
+    setInputs({
+      text: "",
+    });
+    nextId.current += 1;
+  };
+
   return (
     <>
       <GlobalStyle />
       <TodoTemplate>
         <TodoHead todos={todos} />
-        <TodoList todos={todos} />
+        <TodoList todos={todos} onRemove={onRemove} onToggle={onToggle} />
         <TodoCreate />
       </TodoTemplate>
     </>

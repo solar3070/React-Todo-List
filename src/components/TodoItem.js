@@ -1,12 +1,16 @@
 import styled, { css } from "styled-components";
 import { MdDone, MdDelete } from "react-icons/md";
 
-function TodoItem({ id, done, text }) {
+function TodoItem(props) {
+  const { id, text, done, onRemove, onToggle } = props;
+
   return (
     <TodoItemBlock>
-      <CheckCircle done={done}>{done && <MdDone />}</CheckCircle>
+      <CheckCircle done={done} onClick={() => onToggle(id)}>
+        {done && <MdDone />}
+      </CheckCircle>
       <Text done={done}>{text}</Text>
-      <Remove>
+      <Remove onClick={() => onRemove(id)}>
         <MdDelete />
       </Remove>
     </TodoItemBlock>
