@@ -34,7 +34,7 @@ function App() {
       <GlobalStyle />
       <TodoTemplate>
         <TodoHead todos={todos} />
-        <TodoList />
+        <TodoList todos={todos} />
         <TodoCreate />
       </TodoTemplate>
     </>
